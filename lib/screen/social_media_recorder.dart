@@ -84,7 +84,7 @@ class SocialMediaRecorder extends StatefulWidget {
     this.cancelTextBackGroundColor,
     this.radius,
     Key? key,
-    this.isRtl,
+    this.isRtl = true,
   }) : super(key: key);
 
   @override
