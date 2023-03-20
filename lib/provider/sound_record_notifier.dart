@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
+import 'package:uuid/uuid.dart';
 
 class SoundRecordNotifier extends ChangeNotifier {
   GlobalKey key = GlobalKey();
@@ -183,6 +184,21 @@ class SoundRecordNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> getFilePath() async {
+    String _sdPath = "";
+    Directory tempDir = await getTemporaryDirectory();
+    _sdPath = tempDir.path;
+    var d = Directory(_sdPath);
+    if (!d.existsSync()) {
+      d.createSync(recursive: true);
+    }
+    var uuid = const Uuid();
+    String uid = uuid.v4();
+    String storagePath = _sdPath + "/" + uid + '.m4a';
+    mPath = storagePath;
+    return storagePath;
+  }
+
   /// this function to start record voice
   record() async {
     if (!_isAcceptedPermission) {
@@ -192,12 +208,10 @@ class SoundRecordNotifier extends ChangeNotifier {
       _isAcceptedPermission = true;
     } else {
       buttonPressed = true;
-      final directory = await getApplicationDocumentsDirectory();
-      final uniqueId = DateTime.now().microsecondsSinceEpoch;
-      final file = await File('${directory.path}/$uniqueId.m4a').create();
-      mPath = file.path;
+      final filePath = await getFilePath();
+      mPath = filePath;
       _timer = Timer(const Duration(milliseconds: 900), () {
-        recordMp3.start(path: mPath);
+        recordMp3.start(path: filePath);
       });
       // Set a timer to stop recording after 60 seconds
       _timer = Timer(const Duration(seconds: 60), () {
