@@ -83,8 +83,8 @@ class SocialMediaRecorder extends StatefulWidget {
     this.encode = AudioEncoderType.AAC,
     this.cancelTextBackGroundColor,
     this.radius,
-    Key? key,
     this.isRtl = true,
+    Key? key,
   }) : super(key: key);
 
   @override
