@@ -62,6 +62,7 @@ class SocialMediaRecorder extends StatefulWidget {
   final Widget? lockButton;
   // use it to change send button when user lock the record
   final Widget? sendButtonIcon;
+  final bool? isRtl;
 
   // ignore: sort_constructors_first
   const SocialMediaRecorder({
@@ -83,6 +84,7 @@ class SocialMediaRecorder extends StatefulWidget {
     this.cancelTextBackGroundColor,
     this.radius,
     Key? key,
+    this.isRtl,
   }) : super(key: key);
 
   @override
@@ -200,6 +202,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
                 child: Stack(
                   children: [
                     ShowMicWithText(
+                      isRtl: widget.isRtl,
                       counterBackGroundColor: widget.counterBackGroundColor,
                       backGroundColor: widget.recordIconBackGroundColor,
                       recordIcon: widget.recordIcon,
