@@ -64,7 +64,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   late String mPath;
   late AudioEncoderType encode;
   late Function(File soundFile) sendRequestFunction;
-
+  late Function(bool isRecordStart) isRecordStart;
   // ignore: sort_constructors_first
   SoundRecordNotifier({
     this.edge = 0.0,
@@ -78,6 +78,7 @@ class SoundRecordNotifier extends ChangeNotifier {
     this.lockScreenRecord = false,
     this.encode = AudioEncoderType.AAC,
     required this.sendRequestFunction,
+    required this.isRecordStart,
   });
 
   /// To increase counter after 1 sencond
@@ -212,6 +213,7 @@ class SoundRecordNotifier extends ChangeNotifier {
       mPath = filePath;
       _timer = Timer(const Duration(milliseconds: 900), () {
         recordMp3.start(path: filePath);
+        isRecordStart.call(true);
       });
       // Set a timer to stop recording after 60 seconds
       _timer = Timer(const Duration(seconds: 60), () {

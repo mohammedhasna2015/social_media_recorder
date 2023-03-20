@@ -62,6 +62,7 @@ class SocialMediaRecorder extends StatefulWidget {
   final Widget? lockButton;
   // use it to change send button when user lock the record
   final Widget? sendButtonIcon;
+  final Function(bool isRecordStart) isRecordStart;
 
   // ignore: sort_constructors_first
   const SocialMediaRecorder({
@@ -83,6 +84,7 @@ class SocialMediaRecorder extends StatefulWidget {
     this.cancelTextBackGroundColor,
     this.radius,
     Key? key,
+    required this.isRecordStart,
   }) : super(key: key);
 
   @override
@@ -94,8 +96,10 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
   @override
   void initState() {
-    soundRecordNotifier =
-        SoundRecordNotifier(sendRequestFunction: widget.sendRequestFunction);
+    soundRecordNotifier = SoundRecordNotifier(
+      sendRequestFunction: widget.sendRequestFunction,
+      isRecordStart: widget.isRecordStart,
+    );
     soundRecordNotifier.isShow = false;
     soundRecordNotifier.voidInitialSound();
     super.initState();
