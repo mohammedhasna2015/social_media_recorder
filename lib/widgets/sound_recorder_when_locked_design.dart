@@ -35,88 +35,91 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: cancelTextBackGroundColor ?? Colors.grey.shade100,
-        borderRadius: const BorderRadius.only(
-          bottomRight: Radius.circular(24),
-          topRight: Radius.circular(24),
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: cancelTextBackGroundColor ?? Colors.grey.shade100,
+          borderRadius: const BorderRadius.only(
+            bottomRight: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
         ),
-      ),
-      child: InkWell(
-        onTap: () {
-          soundRecordNotifier.isShow = false;
-          soundRecordNotifier.resetEdgePadding();
-        },
-        child: Row(
-          children: [
-            InkWell(
-              onTap: () async {
-                soundRecordNotifier.isShow = false;
-                if (soundRecordNotifier.second > 1 ||
-                    soundRecordNotifier.minute > 0) {
-                  String path = soundRecordNotifier.mPath;
-                  await Future.delayed(const Duration(milliseconds: 2));
-                  sendRequestFunction(File(path));
-                }
-                soundRecordNotifier.resetEdgePadding();
-              },
-              child: Transform.scale(
-                scale: 1.2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(600),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeIn,
-                    width: 50,
-                    height: 50,
-                    child: Container(
-                      color: recordIconWhenLockBackGroundColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: recordIconWhenLockedRecord ??
-                            sendButtonIcon ??
-                            Icon(
-                              Icons.send,
-                              textDirection: TextDirection.ltr,
-                              size: 28,
-                              color: (soundRecordNotifier.buttonPressed)
-                                  ? Colors.grey.shade200
-                                  : Colors.black,
-                            ),
+        child: InkWell(
+          onTap: () {
+            soundRecordNotifier.isShow = false;
+            soundRecordNotifier.resetEdgePadding();
+          },
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () async {
+                  soundRecordNotifier.isShow = false;
+                  if (soundRecordNotifier.second > 1 ||
+                      soundRecordNotifier.minute > 0) {
+                    String path = soundRecordNotifier.mPath;
+                    await Future.delayed(const Duration(milliseconds: 2));
+                    sendRequestFunction(File(path));
+                  }
+                  soundRecordNotifier.resetEdgePadding();
+                },
+                child: Transform.scale(
+                  scale: 1.2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(600),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeIn,
+                      width: 50,
+                      height: 50,
+                      child: Container(
+                        color: recordIconWhenLockBackGroundColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: recordIconWhenLockedRecord ??
+                              sendButtonIcon ??
+                              Icon(
+                                Icons.send,
+                                textDirection: TextDirection.ltr,
+                                size: 28,
+                                color: (soundRecordNotifier.buttonPressed)
+                                    ? Colors.grey.shade200
+                                    : Colors.black,
+                              ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: InkWell(
-                  onTap: () {
-                    soundRecordNotifier.isShow = false;
-                    soundRecordNotifier.resetEdgePadding();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      cancelText ?? "",
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.clip,
-                      style: cancelTextStyle ??
-                          const TextStyle(
-                            color: Colors.black,
-                          ),
-                    ),
-                  )),
-            ),
-            ShowCounter(
-              soundRecorderState: soundRecordNotifier,
-              counterTextStyle: counterTextStyle,
-              counterBackGroundColor: counterBackGroundColor,
-            ),
-          ],
+              Expanded(
+                child: InkWell(
+                    onTap: () {
+                      soundRecordNotifier.isShow = false;
+                      soundRecordNotifier.resetEdgePadding();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        cancelText ?? "",
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.clip,
+                        style: cancelTextStyle ??
+                            const TextStyle(
+                              color: Colors.black,
+                            ),
+                      ),
+                    )),
+              ),
+              ShowCounter(
+                soundRecorderState: soundRecordNotifier,
+                counterTextStyle: counterTextStyle,
+                counterBackGroundColor: counterBackGroundColor,
+              ),
+            ],
+          ),
         ),
       ),
     );
