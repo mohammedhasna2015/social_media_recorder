@@ -172,7 +172,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
           if (state.buttonPressed) {
             if (state.second > 1 || state.minute > 0) {
               String path = state.mPath;
-              widget.sendRequestFunction(File.fromUri(Uri(path: path)));
+              widget.sendRequestFunction(File(path));
             }
           }
           state.resetEdgePadding();
