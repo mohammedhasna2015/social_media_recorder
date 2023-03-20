@@ -39,7 +39,7 @@ class ShowMicWithText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.ltr,
+      textDirection: isRtl == true ? TextDirection.rtl : TextDirection.ltr,
       child: Row(
         mainAxisAlignment: !soundRecorderState.buttonPressed
             ? MainAxisAlignment.center
