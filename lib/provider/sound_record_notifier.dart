@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
-import 'package:uuid/uuid.dart';
 
 class SoundRecordNotifier extends ChangeNotifier {
   GlobalKey key = GlobalKey();
@@ -13,14 +13,13 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// This Timer Just For wait about 1 second until starting record
   Timer? _timer;
 
+  Timer? _timerLimitRecord;
+
   /// This time for counter wait about 1 send to increase counter
   Timer? _timerCounter;
 
   /// Use last to check where the last draggable in X
   double last = 0;
-
-  /// Used when user enter the needed path
-  String initialStorePathRecord = "";
 
   /// recording mp3 sound Object
   Record recordMp3 = Record();
@@ -63,6 +62,8 @@ class SoundRecordNotifier extends ChangeNotifier {
   late bool lockScreenRecord;
   late String mPath;
   late AudioEncoderType encode;
+  late Function(File soundFile) sendRequestFunction;
+
   // ignore: sort_constructors_first
   SoundRecordNotifier({
     this.edge = 0.0,
@@ -75,6 +76,7 @@ class SoundRecordNotifier extends ChangeNotifier {
     this.heightPosition = 0,
     this.lockScreenRecord = false,
     this.encode = AudioEncoderType.AAC,
+    required this.sendRequestFunction,
   });
 
   /// To increase counter after 1 sencond
@@ -98,37 +100,9 @@ class SoundRecordNotifier extends ChangeNotifier {
     lockScreenRecord = false;
     if (_timer != null) _timer!.cancel();
     if (_timerCounter != null) _timerCounter!.cancel();
+    if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
     recordMp3.stop();
     notifyListeners();
-  }
-
-  String _getSoundExtention() {
-    if (encode == AudioEncoderType.AAC ||
-        encode == AudioEncoderType.AAC_LD ||
-        encode == AudioEncoderType.AAC_HE ||
-        encode == AudioEncoderType.OPUS) {
-      return ".m4a";
-    } else {
-      return ".3gp";
-    }
-  }
-
-  /// used to get the current store path
-  Future<String> getFilePath() async {
-    String _sdPath = "";
-      Directory tempDir = await getTemporaryDirectory();
-      _sdPath = initialStorePathRecord.isEmpty
-          ? tempDir.path
-          : initialStorePathRecord;
-    var d = Directory(_sdPath);
-    if (!d.existsSync()) {
-      d.createSync(recursive: true);
-    }
-    var uuid = const Uuid();
-    String uid = uuid.v1();
-    String storagePath = _sdPath + "/" + uid + _getSoundExtention();
-    mPath = storagePath;
-    return storagePath;
   }
 
   /// used to change the draggable to top value
@@ -218,9 +192,17 @@ class SoundRecordNotifier extends ChangeNotifier {
       _isAcceptedPermission = true;
     } else {
       buttonPressed = true;
-      String recordFilePath = await getFilePath();
+      final directory = await getApplicationDocumentsDirectory();
+      final uniqueId = DateTime.now().microsecondsSinceEpoch;
+      final file = await File('${directory.path}/$uniqueId.m4a').create();
+      mPath = file.path;
       _timer = Timer(const Duration(milliseconds: 900), () {
-        recordMp3.start(path: recordFilePath);
+        recordMp3.start(path: mPath);
+      });
+      // Set a timer to stop recording after 60 seconds
+      _timer = Timer(const Duration(seconds: 60), () {
+        sendRequestFunction.call(File(mPath));
+        resetEdgePadding();
       });
       _mapCounterGenerater();
       notifyListeners();

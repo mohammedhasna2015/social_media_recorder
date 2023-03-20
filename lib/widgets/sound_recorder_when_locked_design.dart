@@ -1,6 +1,7 @@
 library social_media_recorder;
 
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:social_media_recorder/provider/sound_record_notifier.dart';
 import 'package:social_media_recorder/widgets/show_counter.dart';
@@ -56,8 +57,8 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                 if (soundRecordNotifier.second > 1 ||
                     soundRecordNotifier.minute > 0) {
                   String path = soundRecordNotifier.mPath;
-                  await Future.delayed(const Duration(milliseconds: 500));
-                  sendRequestFunction(File.fromUri(Uri(path: path)));
+                  await Future.delayed(const Duration(milliseconds: 2));
+                  sendRequestFunction(File(path));
                 }
                 soundRecordNotifier.resetEdgePadding();
               },

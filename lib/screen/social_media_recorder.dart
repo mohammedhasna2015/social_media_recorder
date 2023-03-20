@@ -1,6 +1,7 @@
 library social_media_recorder;
 
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_recorder/provider/sound_record_notifier.dart';
@@ -48,9 +49,6 @@ class SocialMediaRecorder extends StatefulWidget {
   /// use to change cancel text style
   final TextStyle? cancelTextStyle;
 
-  /// put you file directory storage path if you didn't pass it take deafult path
-  final String? storeSoundRecoringPath;
-
   /// Chose the encode type
   final AudioEncoderType encode;
 
@@ -68,7 +66,6 @@ class SocialMediaRecorder extends StatefulWidget {
   // ignore: sort_constructors_first
   const SocialMediaRecorder({
     this.sendButtonIcon,
-    this.storeSoundRecoringPath = "",
     required this.sendRequestFunction,
     this.recordIcon,
     this.lockButton,
@@ -97,9 +94,8 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
   @override
   void initState() {
-    soundRecordNotifier = SoundRecordNotifier();
-    soundRecordNotifier.initialStorePathRecord =
-        widget.storeSoundRecoringPath ?? "";
+    soundRecordNotifier =
+        SoundRecordNotifier(sendRequestFunction: widget.sendRequestFunction);
     soundRecordNotifier.isShow = false;
     soundRecordNotifier.voidInitialSound();
     super.initState();
