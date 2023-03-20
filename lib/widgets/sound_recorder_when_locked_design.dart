@@ -18,6 +18,8 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
   final Color? counterBackGroundColor;
   final Color? cancelTextBackGroundColor;
   final Widget? sendButtonIcon;
+  final bool isRtl;
+
   // ignore: sort_constructors_first
   const SoundRecorderWhenLockedDesign({
     Key? key,
@@ -31,12 +33,13 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
     required this.recordIconWhenLockBackGroundColor,
     required this.counterBackGroundColor,
     required this.cancelTextBackGroundColor,
+    required this.isRtl,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.ltr,
+      textDirection: isRtl == true ? TextDirection.rtl : TextDirection.ltr,
       child: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
@@ -114,6 +117,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                     )),
               ),
               ShowCounter(
+                iRtl: isRtl,
                 soundRecorderState: soundRecordNotifier,
                 counterTextStyle: counterTextStyle,
                 counterBackGroundColor: counterBackGroundColor,

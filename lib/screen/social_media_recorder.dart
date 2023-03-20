@@ -96,8 +96,10 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
   @override
   void initState() {
-    soundRecordNotifier =
-        SoundRecordNotifier(sendRequestFunction: widget.sendRequestFunction);
+    soundRecordNotifier = SoundRecordNotifier(
+      sendRequestFunction: widget.sendRequestFunction,
+      isAr: widget.isRtl ?? true,
+    );
     soundRecordNotifier.isShow = false;
     soundRecordNotifier.voidInitialSound();
     super.initState();
@@ -117,7 +119,10 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         child: Consumer<SoundRecordNotifier>(
           builder: (context, value, _) {
             return Directionality(
-                textDirection: TextDirection.ltr, child: makeBody(value));
+                textDirection: widget.isRtl == true
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
+                child: makeBody(value));
           },
         ));
   }
@@ -148,8 +153,10 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
   Widget recordVoice(SoundRecordNotifier state) {
     if (state.lockScreenRecord == true) {
       return Directionality(
-        textDirection: TextDirection.ltr,
+        textDirection:
+            widget.isRtl == true ? TextDirection.rtl : TextDirection.ltr,
         child: SoundRecorderWhenLockedDesign(
+          isRtl: widget.isRtl ?? true,
           cancelText: widget.cancelText,
           sendButtonIcon: widget.sendButtonIcon,
           cancelTextBackGroundColor: widget.cancelTextBackGroundColor,
@@ -185,7 +192,8 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         }
       },
       child: Directionality(
-        textDirection: TextDirection.ltr,
+        textDirection:
+            widget.isRtl == true ? TextDirection.rtl : TextDirection.ltr,
         child: AnimatedContainer(
           duration:
               Duration(milliseconds: soundRecordNotifier.isShow ? 0 : 300),
@@ -220,6 +228,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
                       ),
                       if (soundRecordNotifier.isShow)
                         ShowCounter(
+                            iRtl: widget.isRtl ?? true,
                             counterBackGroundColor:
                                 widget.counterBackGroundColor,
                             soundRecorderState: state),
@@ -230,6 +239,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
               SizedBox(
                 width: 60,
                 child: LockRecord(
+                  isRtl: widget.isRtl ?? true,
                   soundRecorderState: state,
                   lockIcon: widget.lockButton,
                 ),

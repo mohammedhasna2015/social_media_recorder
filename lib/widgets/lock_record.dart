@@ -8,12 +8,13 @@ class LockRecord extends StatefulWidget {
   /// Object From Provider Notifier
   final SoundRecordNotifier soundRecorderState;
   // ignore: sort_constructors_first
-
+  final bool isRtl;
   final Widget? lockIcon;
   const LockRecord({
     this.lockIcon,
     required this.soundRecorderState,
     Key? key,
+    this.isRtl = true,
   }) : super(key: key);
   @override
   _LockRecordState createState() => _LockRecordState();
@@ -25,7 +26,8 @@ class _LockRecordState extends State<LockRecord> with TickerProviderStateMixin {
     /// If click the Button Then send show lock and un lock icon
     if (!widget.soundRecorderState.buttonPressed) return Container();
     return Directionality(
-      textDirection: TextDirection.ltr,
+      textDirection:
+          widget.isRtl == true ? TextDirection.rtl : TextDirection.ltr,
       child: AnimatedPadding(
         duration: const Duration(seconds: 1),
         padding:

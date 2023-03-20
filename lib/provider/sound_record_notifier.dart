@@ -57,6 +57,7 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   /// store the value we draggble to the top
   late double heightPosition;
+  late bool isAr = true;
 
   /// store status of record if lock change to true else
   /// false
@@ -76,6 +77,7 @@ class SoundRecordNotifier extends ChangeNotifier {
     this.startRecord = false,
     this.heightPosition = 0,
     this.lockScreenRecord = false,
+    this.isAr = false,
     this.encode = AudioEncoderType.AAC,
     required this.sendRequestFunction,
   });
@@ -115,6 +117,61 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// or To The X vertical
   /// and update this value in screen
   updateScrollValue(Offset currentValue, BuildContext context) async {
+    if (isAr == true) {
+      updateScrollValueAr(currentValue, context);
+    } else {
+      updateScrollValueEn(currentValue, context);
+    }
+  }
+
+  updateScrollValueEn(Offset currentValue, BuildContext context) async {
+    if (buttonPressed == true) {
+      final x = currentValue;
+
+      /// take the diffrent between the origin and the current
+      /// draggable to the top place
+      double hightValue = currentButtonHeihtPlace - x.dy;
+
+      /// if reached to the max draggable value in the top
+      if (hightValue >= 50) {
+        isLocked = true;
+        lockScreenRecord = true;
+        hightValue = 50;
+        notifyListeners();
+      }
+      if (hightValue < 0) hightValue = 0;
+      heightPosition = hightValue;
+      lockScreenRecord = isLocked;
+      notifyListeners();
+
+      /// this operation for update X oriantation
+      /// draggable to the left or right place
+      try {
+        RenderBox box = key.currentContext?.findRenderObject() as RenderBox;
+        Offset position = box.localToGlobal(Offset.zero);
+        if (position.dx >= MediaQuery.of(context).size.width * 0.4) {
+          resetEdgePadding();
+        } else if (x.dx <= 0) {
+          edge = 0;
+          last = 0;
+        } else {
+          if (last < x.dx) {
+            edge = edge += x.dx / 200;
+          } else if (last > x.dx) {
+            edge = edge -= x.dx / 200;
+            if (edge < 0) {
+              edge = 0;
+            }
+          }
+          last = x.dx;
+        }
+        // ignore: empty_catches
+      } catch (e) {}
+      notifyListeners();
+    }
+  }
+
+  updateScrollValueAr(Offset currentValue, BuildContext context) async {
     if (buttonPressed == true) {
       final x = currentValue;
 

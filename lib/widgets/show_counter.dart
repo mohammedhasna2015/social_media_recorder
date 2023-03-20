@@ -8,18 +8,20 @@ class ShowCounter extends StatelessWidget {
   final SoundRecordNotifier soundRecorderState;
   final TextStyle? counterTextStyle;
   final Color? counterBackGroundColor;
+  final bool iRtl;
   // ignore: sort_constructors_first
   const ShowCounter({
     required this.soundRecorderState,
     Key? key,
     this.counterTextStyle,
     required this.counterBackGroundColor,
+    required this.iRtl,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: iRtl == true ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width * 0.4,
