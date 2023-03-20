@@ -117,7 +117,10 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         child: Consumer<SoundRecordNotifier>(
           builder: (context, value, _) {
             return Directionality(
-                textDirection: TextDirection.rtl, child: makeBody(value));
+                textDirection: widget.isRtl == true
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
+                child: makeBody(value));
           },
         ));
   }
