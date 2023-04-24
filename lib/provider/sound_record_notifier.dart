@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -24,6 +25,8 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   /// recording mp3 sound Object
   Record recordMp3 = Record();
+
+  AudioPlayer _audioPlayer = AudioPlayer();
 
   /// recording mp3 sound to check if all permisiion passed
   bool _isAcceptedPermission = false;
@@ -103,7 +106,22 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timerCounter != null) _timerCounter!.cancel();
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
     recordMp3.stop();
+    playMp3();
     notifyListeners();
+  }
+
+  /// play music before record
+  ///
+  // Play the MP3 file when the user clicks on the mic icon
+  void playMp3() async {
+    await _audioPlayer.play(
+      AssetSource('audio/videoplayback.mp3'),
+    );
+  }
+
+// Stop playing the MP3 file
+  void stopMp3() async {
+    await _audioPlayer.stop();
   }
 
   /// used to change the draggable to top value
@@ -147,12 +165,12 @@ class SoundRecordNotifier extends ChangeNotifier {
         } else {
           if (x.dx <= MediaQuery.of(context).size.width * 0.5) {}
           if (last < x.dx) {
-            edge = edge -= x.dx / 200;
+            edge = edge -= x.dx / 30;
             if (edge < 0) {
               edge = 0;
             }
           } else if (last > x.dx) {
-            edge = edge += x.dx / 200;
+            edge = edge += x.dx / 30;
           }
           last = x.dx;
         }
@@ -207,6 +225,7 @@ class SoundRecordNotifier extends ChangeNotifier {
       await Permission.storage.request();
       _isAcceptedPermission = true;
     } else {
+      playMp3();
       buttonPressed = true;
       final filePath = await getFilePath();
       mPath = filePath;
