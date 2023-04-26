@@ -92,7 +92,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   }
 
   /// used to reset all value to initial value when end the record
-  resetEdgePadding() async {
+  resetEdgePadding({bool? showSound = true}) async {
     isLocked = false;
     edge = 0;
     buttonPressed = false;
@@ -106,8 +106,11 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timerCounter != null) _timerCounter!.cancel();
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
     recordMp3.stop();
-    endPlayMp3();
-    stopMp3();
+    if (showSound ?? false) {
+      endPlayMp3();
+      stopMp3();
+    }
+
     notifyListeners();
   }
 
