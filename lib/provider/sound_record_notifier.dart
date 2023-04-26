@@ -106,16 +106,23 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timerCounter != null) _timerCounter!.cancel();
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
     recordMp3.stop();
-    playMp3();
+    endPlayMp3();
+    stopMp3();
     notifyListeners();
   }
 
   /// play music before record
   ///
   // Play the MP3 file when the user clicks on the mic icon
-  void playMp3() async {
+  void startPlayMp3() async {
     await _audioPlayer.play(
       AssetSource('audio/videoplayback.mp3'),
+    );
+  }
+
+  void endPlayMp3() async {
+    await _audioPlayer.play(
+      AssetSource('audio/end_record.wav'),
     );
   }
 
@@ -225,7 +232,8 @@ class SoundRecordNotifier extends ChangeNotifier {
       await Permission.storage.request();
       _isAcceptedPermission = true;
     } else {
-      playMp3();
+      startPlayMp3();
+      stopMp3();
       buttonPressed = true;
       final filePath = await getFilePath();
       mPath = filePath;
