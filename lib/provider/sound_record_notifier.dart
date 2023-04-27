@@ -175,12 +175,12 @@ class SoundRecordNotifier extends ChangeNotifier {
         } else {
           if (x.dx <= MediaQuery.of(context).size.width * 0.5) {}
           if (last < x.dx) {
-            edge = edge -= x.dx / 30;
+            edge = edge -= x.dx / 70;
             if (edge < 0) {
               edge = 0;
             }
           } else if (last > x.dx) {
-            edge = edge += x.dx / 30;
+            edge = edge += x.dx / 70;
           }
           last = x.dx;
         }
