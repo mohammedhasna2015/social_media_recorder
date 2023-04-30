@@ -47,7 +47,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
       child: InkWell(
         onTap: () {
           soundRecordNotifier.isShow = false;
-          soundRecordNotifier.resetEdgePadding();
+          soundRecordNotifier.resetEdgePadding(showSound: true);
         },
         child: Row(
           children: [
@@ -60,7 +60,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                   await Future.delayed(const Duration(milliseconds: 2));
                   sendRequestFunction(File(path));
                 }
-                soundRecordNotifier.resetEdgePadding();
+                soundRecordNotifier.resetEdgePadding(showSound: true);
               },
               child: Transform.scale(
                 scale: 1.2,
@@ -95,7 +95,7 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
               child: InkWell(
                   onTap: () {
                     soundRecordNotifier.isShow = false;
-                    soundRecordNotifier.resetEdgePadding();
+                    soundRecordNotifier.resetEdgePadding(showSound: true);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

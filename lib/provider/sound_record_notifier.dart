@@ -92,7 +92,9 @@ class SoundRecordNotifier extends ChangeNotifier {
   }
 
   /// used to reset all value to initial value when end the record
-  resetEdgePadding({bool? showSound = true}) async {
+  resetEdgePadding({
+    bool? showSound = true,
+  }) async {
     isLocked = false;
     edge = 0;
     buttonPressed = false;
@@ -106,9 +108,9 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timerCounter != null) _timerCounter!.cancel();
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
     recordMp3.stop();
+
     if (showSound ?? false) {
       endPlayMp3();
-      stopMp3();
     }
 
     notifyListeners();
@@ -168,19 +170,19 @@ class SoundRecordNotifier extends ChangeNotifier {
         RenderBox box = key.currentContext?.findRenderObject() as RenderBox;
         Offset position = box.localToGlobal(Offset.zero);
         if (position.dx <= MediaQuery.of(context).size.width * 0.6) {
-          resetEdgePadding();
+          resetEdgePadding(showSound: true);
         } else if (x.dx >= MediaQuery.of(context).size.width) {
           edge = 0;
           edge = 0;
         } else {
           if (x.dx <= MediaQuery.of(context).size.width * 0.5) {}
           if (last < x.dx) {
-            edge = edge -= x.dx / 70;
+            edge = edge -= x.dx / 120;
             if (edge < 0) {
               edge = 0;
             }
           } else if (last > x.dx) {
-            edge = edge += x.dx / 70;
+            edge = edge += x.dx / 120;
           }
           last = x.dx;
         }
@@ -246,7 +248,7 @@ class SoundRecordNotifier extends ChangeNotifier {
       // Set a timer to stop recording after 60 seconds
       _timer = Timer(const Duration(seconds: 60), () {
         sendRequestFunction.call(File(mPath));
-        resetEdgePadding();
+        resetEdgePadding(showSound: true);
       });
       _mapCounterGenerater();
       notifyListeners();

@@ -175,7 +175,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
               widget.sendRequestFunction(File(path));
             }
           }
-          state.resetEdgePadding();
+          state.resetEdgePadding(showSound: true);
         }
       },
       child: AnimatedContainer(
