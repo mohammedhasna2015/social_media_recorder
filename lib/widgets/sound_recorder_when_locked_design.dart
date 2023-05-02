@@ -59,8 +59,13 @@ class SoundRecorderWhenLockedDesign extends StatelessWidget {
                   String path = soundRecordNotifier.mPath;
                   await Future.delayed(const Duration(milliseconds: 2));
                   sendRequestFunction(File(path));
+                  soundRecordNotifier.resetEdgePadding(
+                    showSound: false,
+                    sendSound: true,
+                  );
+                } else {
+                  soundRecordNotifier.resetEdgePadding(showSound: true);
                 }
-                soundRecordNotifier.resetEdgePadding(showSound: true);
               },
               child: Transform.scale(
                 scale: 1.2,

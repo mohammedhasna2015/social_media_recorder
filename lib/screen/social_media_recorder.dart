@@ -173,9 +173,16 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
             if (state.second > 1 || state.minute > 0) {
               String path = state.mPath;
               widget.sendRequestFunction(File(path));
+              state.resetEdgePadding(
+                showSound: false,
+                sendSound: true,
+              );
+            } else {
+              state.resetEdgePadding(showSound: true);
             }
+          } else {
+            state.resetEdgePadding(showSound: true);
           }
-          state.resetEdgePadding(showSound: true);
         }
       },
       child: AnimatedContainer(

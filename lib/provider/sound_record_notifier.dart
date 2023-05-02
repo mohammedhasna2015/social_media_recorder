@@ -94,6 +94,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// used to reset all value to initial value when end the record
   resetEdgePadding({
     bool? showSound = true,
+    bool? sendSound = false,
   }) async {
     isLocked = false;
     edge = 0;
@@ -109,6 +110,9 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
     recordMp3.stop();
 
+    if (sendSound ?? false) {
+      sendPlayMp3();
+    }
     if (showSound ?? false) {
       endPlayMp3();
     }
@@ -128,6 +132,12 @@ class SoundRecordNotifier extends ChangeNotifier {
   void endPlayMp3() async {
     await _audioPlayer.play(
       AssetSource('audio/end_record.wav'),
+    );
+  }
+
+  void sendPlayMp3() async {
+    await _audioPlayer.play(
+      AssetSource('audio/message_send.wav'),
     );
   }
 
@@ -248,7 +258,10 @@ class SoundRecordNotifier extends ChangeNotifier {
       // Set a timer to stop recording after 60 seconds
       _timer = Timer(const Duration(seconds: 60), () {
         sendRequestFunction.call(File(mPath));
-        resetEdgePadding(showSound: true);
+        resetEdgePadding(
+          showSound: false,
+          sendSound: true,
+        );
       });
       _mapCounterGenerater();
       notifyListeners();
