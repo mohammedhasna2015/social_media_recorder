@@ -95,8 +95,10 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
   @override
   void initState() {
-    soundRecordNotifier =
-        SoundRecordNotifier(sendRequestFunction: widget.sendRequestFunction);
+    soundRecordNotifier = SoundRecordNotifier(
+      sendRequestFunction: widget.sendRequestFunction,
+      timeRecordLimitation: widget.timeRecordLimitation,
+    );
     soundRecordNotifier.isShow = false;
     soundRecordNotifier.voidInitialSound();
     super.initState();
