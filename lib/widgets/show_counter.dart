@@ -54,8 +54,8 @@ class ShowCounter extends StatelessWidget {
                 duration: const Duration(seconds: 1),
                 opacity: soundRecorderState.second % 2 == 0 ? 1 : 0,
                 child: const Icon(
-                  Icons.mic,
-                  color: Colors.red,
+                  Icons.delete,
+                  color: Color(0XFF007AFF),
                 ),
               ),
               const SizedBox(width: 10),

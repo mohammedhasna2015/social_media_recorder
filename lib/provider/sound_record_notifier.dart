@@ -60,6 +60,7 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   /// store the value we draggble to the top
   late double heightPosition;
+  final int? timeRecordLimitation;
 
   /// store status of record if lock change to true else
   /// false
@@ -70,6 +71,7 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   // ignore: sort_constructors_first
   SoundRecordNotifier({
+    this.timeRecordLimitation = 60,
     this.edge = 0.0,
     this.minute = 0,
     this.second = 0,
@@ -256,7 +258,7 @@ class SoundRecordNotifier extends ChangeNotifier {
         recordMp3.start(path: filePath);
       });
       // Set a timer to stop recording after 60 seconds
-      _timer = Timer(const Duration(seconds: 60), () {
+      _timer = Timer(Duration(seconds: timeRecordLimitation ?? 60), () {
         sendRequestFunction.call(File(mPath));
         resetEdgePadding(
           showSound: false,

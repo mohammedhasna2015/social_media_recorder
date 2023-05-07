@@ -62,7 +62,7 @@ class SocialMediaRecorder extends StatefulWidget {
   final Widget? lockButton;
   // use it to change send button when user lock the record
   final Widget? sendButtonIcon;
-
+  final int? timeRecordLimitation;
   // ignore: sort_constructors_first
   const SocialMediaRecorder({
     this.sendButtonIcon,
@@ -83,6 +83,7 @@ class SocialMediaRecorder extends StatefulWidget {
     this.cancelTextBackGroundColor,
     this.radius,
     Key? key,
+    this.timeRecordLimitation = 60,
   }) : super(key: key);
 
   @override
