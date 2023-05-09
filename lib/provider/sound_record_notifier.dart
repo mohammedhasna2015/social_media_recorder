@@ -71,7 +71,7 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   // ignore: sort_constructors_first
   SoundRecordNotifier({
-    this.timeRecordLimitation = 60,
+    this.timeRecordLimitation,
     this.edge = 0.0,
     this.minute = 0,
     this.second = 0,
@@ -216,11 +216,7 @@ class SoundRecordNotifier extends ChangeNotifier {
 
     second = second + 1;
     buttonPressed = buttonPressed;
-    if (second == 60) {
-      second = 0;
-      minute = minute + 1;
-    }
-
+    minute = timeRecordLimitation ?? 60;
     notifyListeners();
     loopActive = false;
     notifyListeners();

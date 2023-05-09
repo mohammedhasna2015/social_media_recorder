@@ -83,7 +83,7 @@ class SocialMediaRecorder extends StatefulWidget {
     this.cancelTextBackGroundColor,
     this.radius,
     Key? key,
-    this.timeRecordLimitation = 60,
+    this.timeRecordLimitation,
   }) : super(key: key);
 
   @override
