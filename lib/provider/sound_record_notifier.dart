@@ -68,9 +68,11 @@ class SoundRecordNotifier extends ChangeNotifier {
   late String mPath;
   late AudioEncoderType encode;
   late Function(File soundFile) sendRequestFunction;
+  final int? slideToCancelValue;
 
   // ignore: sort_constructors_first
   SoundRecordNotifier({
+    this.slideToCancelValue,
     this.timeRecordLimitation,
     this.edge = 0.0,
     this.minute = 0,
@@ -189,12 +191,12 @@ class SoundRecordNotifier extends ChangeNotifier {
         } else {
           if (x.dx <= MediaQuery.of(context).size.width * 0.5) {}
           if (last < x.dx) {
-            edge = edge -= x.dx / 100;
+            edge = edge -= x.dx / (slideToCancelValue ?? 60);
             if (edge < 0) {
               edge = 0;
             }
           } else if (last > x.dx) {
-            edge = edge += x.dx / 100;
+            edge = edge += x.dx / (slideToCancelValue ?? 60);
           }
           last = x.dx;
         }

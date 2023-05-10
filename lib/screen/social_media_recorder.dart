@@ -57,7 +57,7 @@ class SocialMediaRecorder extends StatefulWidget {
 
   // use to change the counter back ground color
   final Color? counterBackGroundColor;
-
+  final int? slideToCancelValue;
   // use to change lock icon to design you need it
   final Widget? lockButton;
   // use it to change send button when user lock the record
@@ -84,6 +84,7 @@ class SocialMediaRecorder extends StatefulWidget {
     this.radius,
     Key? key,
     this.timeRecordLimitation,
+    this.slideToCancelValue,
   }) : super(key: key);
 
   @override
@@ -164,7 +165,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
     return Listener(
       onPointerDown: (details) async {
-        state.setNewInitialDraggableHeight(details.position.dy - 40);
+        state.setNewInitialDraggableHeight(details.position.dy);
         state.resetEdgePadding(showSound: false);
 
         soundRecordNotifier.isShow = true;
