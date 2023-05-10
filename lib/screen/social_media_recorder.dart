@@ -164,7 +164,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
     return Listener(
       onPointerDown: (details) async {
-        state.setNewInitialDraggableHeight(details.position.dy);
+        state.setNewInitialDraggableHeight(details.position.dy - 40);
         state.resetEdgePadding(showSound: false);
 
         soundRecordNotifier.isShow = true;

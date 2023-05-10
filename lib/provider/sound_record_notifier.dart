@@ -182,19 +182,19 @@ class SoundRecordNotifier extends ChangeNotifier {
         RenderBox box = key.currentContext?.findRenderObject() as RenderBox;
         Offset position = box.localToGlobal(Offset.zero);
         if (position.dx <= MediaQuery.of(context).size.width * 0.6) {
-          resetEdgePadding(showSound: true);
+          resetEdgePadding();
         } else if (x.dx >= MediaQuery.of(context).size.width) {
           edge = 0;
           edge = 0;
         } else {
-          if (x.dx <= MediaQuery.of(context).size.width * 1) {}
+          if (x.dx <= MediaQuery.of(context).size.width * 0.5) {}
           if (last < x.dx) {
-            edge = edge -= x.dx / 60;
+            edge = edge -= x.dx / 100;
             if (edge < 0) {
               edge = 0;
             }
           } else if (last > x.dx) {
-            edge = edge += x.dx / 60;
+            edge = edge += x.dx / 100;
           }
           last = x.dx;
         }
