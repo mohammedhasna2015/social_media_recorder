@@ -45,7 +45,7 @@ class ShowMicWithText extends StatelessWidget {
           children: [
             Transform.scale(
               key: soundRecorderState.key,
-              scale: soundRecorderState.buttonPressed ? 3 : 1,
+              scale: soundRecorderState.buttonPressed ? 1.2 : 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(600),
                 child: AnimatedContainer(
