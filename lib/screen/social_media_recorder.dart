@@ -99,6 +99,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     soundRecordNotifier = SoundRecordNotifier(
       sendRequestFunction: widget.sendRequestFunction,
       timeRecordLimitation: widget.timeRecordLimitation,
+      slideToCancelValue: widget.slideToCancelValue,
     );
     soundRecordNotifier.isShow = false;
     soundRecordNotifier.voidInitialSound();
