@@ -83,6 +83,7 @@ class ShowMicWithText extends StatelessWidget {
                 overflow: TextOverflow.clip,
                 maxLines: 1,
                 style: const TextStyle(
+                  decoration: TextDecoration.none,
                   fontSize: 14.0,
                 ),
                 child: AnimatedTextKit(
