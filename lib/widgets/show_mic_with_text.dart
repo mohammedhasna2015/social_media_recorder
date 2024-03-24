@@ -1,6 +1,5 @@
 library social_media_recorder;
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_recorder/provider/sound_record_notifier.dart';
 
@@ -79,24 +78,11 @@ class ShowMicWithText extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
-              child: DefaultTextStyle(
-                overflow: TextOverflow.clip,
+              child: Text(
+                slideToCancelText ?? "",
                 maxLines: 1,
-                style: const TextStyle(
-                  decoration: TextDecoration.none,
-                  fontSize: 14.0,
-                ),
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    ColorizeAnimatedText(
-                      slideToCancelText ?? "",
-                      textStyle: slideToCancelTextStyle ?? colorizeTextStyle,
-                      colors: colorizeColors,
-                    ),
-                  ],
-                  isRepeatingAnimation: true,
-                  onTap: () {},
-                ),
+                overflow: TextOverflow.clip,
+                style: slideToCancelTextStyle ?? colorizeTextStyle,
               ),
             ),
           ),
