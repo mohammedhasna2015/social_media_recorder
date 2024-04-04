@@ -85,16 +85,9 @@ class ShowMicWithText extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 14.0,
                 ),
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    TypewriterAnimatedText(
-                      slideToCancelText ?? "",
-                      textStyle: slideToCancelTextStyle ?? colorizeTextStyle,
-                      speed: Duration(milliseconds: 200),
-                    ),
-                  ],
-                  isRepeatingAnimation: true,
-                  onTap: () {},
+                child:Text(
+                  slideToCancelText ?? "",
+                  style: slideToCancelTextStyle ?? colorizeTextStyle,
                 ),
               ),
             ),
