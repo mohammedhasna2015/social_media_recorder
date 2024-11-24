@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -271,15 +272,43 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   /// to check permission
   voidInitialSound() async {
-    if (Platform.isIOS) _isAcceptedPermission = true;
-
     startRecord = false;
-    final status = await Permission.microphone.status;
-    if (status.isGranted) {
-      final result = await Permission.storage.request();
-      if (result.isGranted) {
-        _isAcceptedPermission = true;
-      }
+    final result = await checkPermission(permission: Permission.microphone);
+    if (result) {
+      _checkStorage();
     }
+  }
+
+  Future<void> _checkStorage() async {
+    var isAndroid13OrHigher = false;
+    if (Platform.isAndroid) {
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+      isAndroid13OrHigher = androidInfo.version.sdkInt >= 33;
+    }
+    final permission = (isAndroid13OrHigher || Platform.isIOS)
+        ? Permission.photos
+        : Permission.storage;
+    _isAcceptedPermission = await checkPermission(permission: permission);
+  }
+
+  static Future<bool> checkPermission({
+    required Permission permission,
+  }) async {
+    PermissionStatus status = await permission.status;
+    print('permission status: ${status.name}');
+    if (status.isGranted) {
+      return true;
+    } else if (status.isDenied) {
+      status = await permission.request();
+      if (status.isGranted) {
+        return true;
+      }
+    } else if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
+
+    // Recheck permission after dialog
+    return await permission.status.isGranted;
   }
 }

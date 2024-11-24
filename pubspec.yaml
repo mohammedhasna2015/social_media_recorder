@@ -28,6 +28,7 @@ dependencies:
   record: ^3.0.2
   file: ^6.1.4
   audioplayers: ^6.0.0
+  device_info_plus: ^10.1.2
 
 dev_dependencies:
   flutter_test:
