@@ -176,7 +176,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
       if (status.isGranted) {
         return true;
       }
-    } else if (status.isPermanentlyDenied) {
+    } else if (status.isPermanentlyDenied || status.isLimited) {
       await openAppSettings();
     }
     // Recheck permission after dialog
