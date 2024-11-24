@@ -2,7 +2,9 @@ library social_media_recorder;
 
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_recorder/provider/sound_record_notifier.dart';
 import 'package:social_media_recorder/widgets/lock_record.dart';
@@ -149,6 +151,38 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     );
   }
 
+  Future<bool> _checkStorage() async {
+    var isAndroid13OrHigher = false;
+    if (Platform.isAndroid) {
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+      isAndroid13OrHigher = androidInfo.version.sdkInt >= 33;
+    }
+    final permission = (isAndroid13OrHigher || Platform.isIOS)
+        ? Permission.photos
+        : Permission.storage;
+    return await checkPermission(permission: permission);
+  }
+
+  static Future<bool> checkPermission({
+    required Permission permission,
+  }) async {
+    PermissionStatus status = await permission.status;
+    print('permission status: $status');
+    if (status.isGranted) {
+      return true;
+    } else if (status.isDenied) {
+      status = await permission.request();
+      if (status.isGranted) {
+        return true;
+      }
+    } else if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
+    // Recheck permission after dialog
+    return await permission.status.isGranted;
+  }
+
   Widget recordVoice(SoundRecordNotifier state) {
     if (state.lockScreenRecord == true) {
       return SoundRecorderWhenLockedDesign(
@@ -168,11 +202,16 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
     return Listener(
       onPointerDown: (details) async {
-        state.setNewInitialDraggableHeight(details.position.dy);
-        state.resetEdgePadding(showSound: false);
-
-        soundRecordNotifier.isShow = true;
-        state.record();
+        final result = await checkPermission(permission: Permission.microphone);
+        if (result) {
+          final data = await _checkStorage();
+          if (data) {
+            state.setNewInitialDraggableHeight(details.position.dy);
+            state.resetEdgePadding(showSound: false);
+            soundRecordNotifier.isShow = true;
+            state.record();
+          }
+        }
       },
       onPointerUp: (details) async {
         if (!state.isLocked) {

@@ -24,6 +24,30 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+    <string>Modarby may need Apple Music to import the instructor voice records, And play it.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Modarby may need calendars to add the booked lesson.</string>
+    <key>NSCameraUsageDescrAPPLAPPLiption</key>
+    <string>Modarby requires access to the camera to upload a profile picture for your account or upload transaction bills while paying the course.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Modarby requires access to the camera to upload a profile picture for your account or upload transaction bills while paying the course.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>Modarby may need access to your contacts to add instructor contact.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs to access your location data to help you find the best instructors in your area. By using your location, we can show you instructors who are closest to you and provide you with more accurate search results. We take your privacy seriously and will never share your location data with third parties without your consent.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Modarby requires access to location when in the background To change your timezone, currency upon location And suggest you the nearest instructors.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Modarby needs access to location when open To change your timezone, currency upon location And suggest you the nearest instructors.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Modarby needs access to the microphone to send voice messages and audio calls.</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Modarby may need Motion Usage to enhance the user experience.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Modarby requires access to the photo library to upload a profile picture for your account or upload transaction bills while paying the course.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Modarby may need speech recognition to enhance the user experience.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

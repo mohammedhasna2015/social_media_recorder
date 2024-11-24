@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
 import 'package:uuid/uuid.dart';
@@ -242,12 +240,7 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   /// this function to start record voice
   record() async {
-    if (!_isAcceptedPermission) {
-      await Permission.microphone.request();
-      await Permission.manageExternalStorage.request();
-      await Permission.storage.request();
-      _isAcceptedPermission = true;
-    } else {
+    if (_isAcceptedPermission) {
       startPlayMp3();
       stopMp3();
       buttonPressed = true;
@@ -273,42 +266,9 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// to check permission
   voidInitialSound() async {
     startRecord = false;
-    final result = await checkPermission(permission: Permission.microphone);
-    if (result) {
-      _checkStorage();
-    }
-  }
-
-  Future<void> _checkStorage() async {
-    var isAndroid13OrHigher = false;
-    if (Platform.isAndroid) {
-      final deviceInfo = DeviceInfoPlugin();
-      final androidInfo = await deviceInfo.androidInfo;
-      isAndroid13OrHigher = androidInfo.version.sdkInt >= 33;
-    }
-    final permission = (isAndroid13OrHigher || Platform.isIOS)
-        ? Permission.photos
-        : Permission.storage;
-    _isAcceptedPermission = await checkPermission(permission: permission);
-  }
-
-  static Future<bool> checkPermission({
-    required Permission permission,
-  }) async {
-    PermissionStatus status = await permission.status;
-    print('permission status: ${status.name}');
-    if (status.isGranted) {
-      return true;
-    } else if (status.isDenied) {
-      status = await permission.request();
-      if (status.isGranted) {
-        return true;
-      }
-    } else if (status.isPermanentlyDenied) {
-      await openAppSettings();
-    }
-
-    // Recheck permission after dialog
-    return await permission.status.isGranted;
+    // final result = await checkPermission(permission: Permission.microphone);
+    // if (result) {
+    //   _checkStorage();
+    // }
   }
 }
