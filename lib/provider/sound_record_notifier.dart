@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
 import 'package:uuid/uuid.dart';
@@ -240,22 +241,16 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   /// this function to start record voice
   record() async {
-    if (_isAcceptedPermission) {
-      startPlayMp3();
-      stopMp3();
+    if (!_isAcceptedPermission) {
+      await Permission.microphone.request();
+      await Permission.manageExternalStorage.request();
+      await Permission.storage.request();
+      _isAcceptedPermission = true;
+    } else {
       buttonPressed = true;
-      final filePath = await getFilePath();
-      mPath = filePath;
+      String recordFilePath = await getFilePath();
       _timer = Timer(const Duration(milliseconds: 900), () {
-        recordMp3.start(path: filePath);
-      });
-      // Set a timer to stop recording after 60 seconds
-      _timer = Timer(Duration(seconds: timeRecordLimitation ?? 60), () {
-        sendRequestFunction.call(File(mPath));
-        resetEdgePadding(
-          showSound: false,
-          sendSound: true,
-        );
+        recordMp3.start(path: recordFilePath);
       });
       _mapCounterGenerater();
       notifyListeners();
@@ -266,9 +261,5 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// to check permission
   voidInitialSound() async {
     startRecord = false;
-    // final result = await checkPermission(permission: Permission.microphone);
-    // if (result) {
-    //   _checkStorage();
-    // }
   }
 }
