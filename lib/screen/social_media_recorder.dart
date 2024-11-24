@@ -167,16 +167,11 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
   static Future<bool> checkPermission({
     required Permission permission,
   }) async {
-    PermissionStatus status = await permission.status;
+    PermissionStatus status = await permission.request();
     print('permission status: $status');
     if (status.isGranted) {
       return true;
-    } else if (status.isDenied) {
-      status = await permission.request();
-      if (status.isGranted) {
-        return true;
-      }
-    } else if (status.isPermanentlyDenied || status.isLimited) {
+    } else {
       await openAppSettings();
     }
     // Recheck permission after dialog
