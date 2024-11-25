@@ -161,21 +161,70 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     final permission = (isAndroid13OrHigher || Platform.isIOS)
         ? Permission.photos
         : Permission.storage;
-    return await checkPermission(permission: permission);
+    final data = await checkPermission(
+      permission: permission,
+      title: 'Permission storage required',
+      body:
+          'we need this permission To make voice messages activate this feature',
+    );
+    if (Platform.isAndroid) {
+      final data1 = await checkPermission(
+        permission: Permission.manageExternalStorage,
+        title: 'Permission storage required',
+        body:
+            'we need this permission To make voice messages activate this feature',
+      );
+      return data1;
+    } else {
+      return data;
+    }
   }
 
-  static Future<bool> checkPermission({
+  Future<bool> checkPermission({
     required Permission permission,
+    required String title,
+    required String body,
   }) async {
     PermissionStatus status = await permission.request();
     print('permission status: $status');
     if (status.isGranted) {
       return true;
     } else {
-      await openAppSettings();
+      showPermissionDialog(context, title, body);
     }
     // Recheck permission after dialog
     return await permission.status.isGranted;
+  }
+
+  void showPermissionDialog(BuildContext context, String title, String body) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Storage Permission Required'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${title ?? ''}'),
+            SizedBox(height: 16),
+            Text('${body ?? ''}'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await openAppSettings();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget recordVoice(SoundRecordNotifier state) {
@@ -197,7 +246,11 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
     return Listener(
       onPointerDown: (details) async {
-        final result = await checkPermission(permission: Permission.microphone);
+        final result = await checkPermission(
+            permission: Permission.microphone,
+            title: 'Permission Microphone required',
+            body:
+                'we need this permission To make calls & voice messages activate this feature');
         if (result) {
           final data = await _checkStorage();
           if (data) {
