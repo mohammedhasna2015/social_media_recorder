@@ -48,6 +48,7 @@ class SocialMediaRecorder extends StatefulWidget {
 
   /// this text show when lock record and to tell user should press in this text to cancel recod
   final String? cancelText;
+  final bool isAr;
 
   /// use to change cancel text style
   final TextStyle? cancelTextStyle;
@@ -69,6 +70,7 @@ class SocialMediaRecorder extends StatefulWidget {
   // ignore: sort_constructors_first
   const SocialMediaRecorder({
     this.sendButtonIcon,
+    this.isAr = true,
     required this.sendRequestFunction,
     this.recordIcon,
     this.voiceButtonColor,
@@ -163,16 +165,18 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         : Permission.storage;
     final data = await checkPermission(
       permission: permission,
-      title: 'Permission storage required',
-      body:
-          'we need this permission To make voice messages activate this feature',
+      title: widget.isAr ? 'تفعيل الارشيف' : 'Permission storage required',
+      body: widget.isAr
+          ? 'تفعيل الارشيف'
+          : 'فعل الخيار للاستفادة من الرسائل الصوتية',
     );
     if (Platform.isAndroid) {
       final data1 = await checkPermission(
         permission: Permission.manageExternalStorage,
-        title: 'Permission storage required',
-        body:
-            'we need this permission To make voice messages activate this feature',
+        title: widget.isAr ? 'تفعيل الارشيف' : 'Permission storage required',
+        body: widget.isAr
+            ? 'تفعيل الارشيف'
+            : 'فعل الخيار للاستفادة من الرسائل الصوتية',
       );
       return data1;
     } else {
@@ -248,9 +252,12 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
       onPointerDown: (details) async {
         final result = await checkPermission(
             permission: Permission.microphone,
-            title: 'Permission Microphone required',
-            body:
-                'we need this permission To make calls & voice messages activate this feature');
+            title: widget.isAr
+                ? 'تفعيل المايكروفون'
+                : 'Permission Microphone required',
+            body: widget.isAr
+                ? 'فعل الخيار للاستفادة من الرسائل الصوتية'
+                : 'we need this permission To make calls & voice messages activate this feature');
         if (result) {
           final data = await _checkStorage();
           if (data) {
