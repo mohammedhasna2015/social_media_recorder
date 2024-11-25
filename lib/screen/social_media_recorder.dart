@@ -219,14 +219,14 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(widget.isAr ? 'إلغاء' : 'Cancel'),
           ),
           TextButton(
             onPressed: () async {
               await openAppSettings();
               Navigator.of(context).pop();
             },
-            child: const Text('Open Settings'),
+            child: Text(widget.isAr ? 'فتح الاعدادات' : 'Open Settings'),
           ),
         ],
       ),
