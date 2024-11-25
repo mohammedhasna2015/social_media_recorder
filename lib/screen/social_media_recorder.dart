@@ -167,16 +167,16 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
       permission: permission,
       title: widget.isAr ? 'تفعيل الارشيف' : 'Permission storage required',
       body: widget.isAr
-          ? 'تفعيل الارشيف'
-          : 'فعل الخيار للاستفادة من الرسائل الصوتية',
+          ? 'فعل الخيار للاستفادة من الرسائل الصوتية'
+          : 'To make calls & voice messages activate this feature',
     );
     if (Platform.isAndroid) {
       final data1 = await checkPermission(
         permission: Permission.manageExternalStorage,
         title: widget.isAr ? 'تفعيل الارشيف' : 'Permission storage required',
         body: widget.isAr
-            ? 'تفعيل الحافظة'
-            : 'فعل الخيار للاستفادة من الرسائل الصوتية',
+            ? 'فعل الخيار للاستفادة من الرسائل الصوتية'
+            : 'To make calls & voice messages activate this feature',
       );
       return data1;
     } else {
