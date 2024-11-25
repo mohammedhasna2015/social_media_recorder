@@ -2,7 +2,6 @@ library social_media_recorder;
 
 import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -153,56 +152,6 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     );
   }
 
-  Future<bool> _checkStorage() async {
-    var isAndroid13OrHigher = false;
-    if (Platform.isAndroid) {
-      final deviceInfo = DeviceInfoPlugin();
-      final androidInfo = await deviceInfo.androidInfo;
-      isAndroid13OrHigher = androidInfo.version.sdkInt >= 33;
-    }
-    final permission = (isAndroid13OrHigher || Platform.isIOS)
-        ? Permission.photos
-        : Permission.storage;
-    final data = await checkPermission(
-      permission: permission,
-      title: widget.isAr ? 'تفعيل الارشيف' : 'Permission storage required',
-      body: widget.isAr
-          ? 'فعل الخيار للاستفادة من الرسائل الصوتية'
-          : 'To make calls & voice messages activate this feature',
-    );
-    if (Platform.isAndroid) {
-      final data1 = await checkPermission(
-        permission: Permission.manageExternalStorage,
-        title: widget.isAr ? 'تفعيل الذاكرة' : 'Permission storage required',
-        body: widget.isAr
-            ? 'فعل الخيار للاستفادة من الرسائل الصوتية'
-            : 'To make calls & voice messages activate this feature',
-      );
-      return data1;
-    } else {
-      return data;
-    }
-  }
-
-  Future<bool> checkPermission({
-    required Permission permission,
-    required String title,
-    required String body,
-  }) async {
-    PermissionStatus status = await permission.status;
-    print('permission status: $status');
-    if (status.isGranted) {
-      return true;
-    } else if (status.isDenied) {
-      final result = await permission.request();
-      return result.isGranted;
-    } else {
-      showPermissionDialog(context, title, body);
-    }
-    // Recheck permission after dialog
-    return await permission.status.isGranted;
-  }
-
   void showPermissionDialog(BuildContext context, String title, String body) {
     showDialog(
       context: context,
@@ -252,22 +201,12 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
     return Listener(
       onPointerDown: (details) async {
-        final result = await checkPermission(
-            permission: Permission.microphone,
-            title: widget.isAr
-                ? 'تفعيل المايكروفون'
-                : 'Permission Microphone required',
-            body: widget.isAr
-                ? 'فعل الخيار للاستفادة من الرسائل الصوتية'
-                : 'we need this permission To make calls & voice messages activate this feature');
-        if (result) {
-          final data = await _checkStorage();
-          if (data) {
-            state.setNewInitialDraggableHeight(details.position.dy);
-            state.resetEdgePadding(showSound: false);
-            soundRecordNotifier.isShow = true;
-            state.record();
-          }
+        final isPermissionsEnabled = await requestAudioPermissions();
+        if (isPermissionsEnabled) {
+          state.setNewInitialDraggableHeight(details.position.dy);
+          state.resetEdgePadding(showSound: false);
+          soundRecordNotifier.isShow = true;
+          state.record();
         }
       },
       onPointerUp: (details) async {
@@ -337,5 +276,77 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         ),
       ),
     );
+  }
+
+  Future<bool> requestAudioPermissions() async {
+    // Request microphone permission first
+    var microphoneStatus = await Permission.microphone.request();
+    if (!microphoneStatus.isGranted) {
+      _showPermissionDialog(); // Show dialog only if microphone permission is denied
+      return false;
+    }
+
+    // If microphone permission is granted, then request storage permissions
+    var storageStatus = await Permission.storage.request();
+    var externalStorageStatus =
+        await Permission.manageExternalStorage.request();
+
+    if (storageStatus.isGranted || externalStorageStatus.isGranted) {
+      return true;
+    } else {
+      _showPermissionDialog(); // Show dialog if storage permissions are denied
+      return false;
+    }
+  }
+
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(_getLocalizedText('permission_required')),
+          content: Text(_getLocalizedText('permission_settings_message')),
+          actions: <Widget>[
+            TextButton(
+              child: Text(_getLocalizedText('cancel')),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text(_getLocalizedText('open_settings')),
+              onPressed: () {
+                Navigator.of(context).pop();
+                openAppSettings();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String _getLocalizedText(String key) {
+    final Map<String, Map<String, String>> _localizations = {
+      'en': {
+        'permissions_granted': 'Audio recording permissions granted',
+        'permissions_denied': 'Audio recording permissions denied',
+        'permission_required': 'Permissions Required',
+        'permission_settings_message':
+            'Please grant microphone and storage permissions in app settings.',
+        'cancel': 'Cancel',
+        'open_settings': 'Open Settings',
+      },
+      'ar': {
+        'permissions_granted': 'تم منح أذونات التسجيل الصوتي',
+        'permissions_denied': 'تم رفض أذونات التسجيل الصوتي',
+        'permission_required': 'الأذونات مطلوبة',
+        'permission_settings_message':
+            'يرجى منح أذونات الميكروفون والتخزين في إعدادات التطبيق.',
+        'cancel': 'إلغاء',
+        'open_settings': 'فتح الإعدادات',
+      }
+    };
+
+    return _localizations[widget.isAr ? 'ar' : 'en']?[key] ??
+        _localizations['en']![key]!;
   }
 }
