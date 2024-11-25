@@ -175,7 +175,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         permission: Permission.manageExternalStorage,
         title: widget.isAr ? 'تفعيل الارشيف' : 'Permission storage required',
         body: widget.isAr
-            ? 'تفعيل الارشيف'
+            ? 'تفعيل الحافظة'
             : 'فعل الخيار للاستفادة من الرسائل الصوتية',
       );
       return data1;
