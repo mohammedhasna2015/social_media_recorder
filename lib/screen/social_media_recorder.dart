@@ -189,10 +189,13 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     required String title,
     required String body,
   }) async {
-    PermissionStatus status = await permission.request();
+    PermissionStatus status = await permission.status;
     print('permission status: $status');
     if (status.isGranted) {
       return true;
+    } else if (status.isDenied) {
+      final result = await permission.request();
+      return result.isGranted;
     } else {
       showPermissionDialog(context, title, body);
     }
@@ -204,12 +207,11 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Storage Permission Required'),
+        title: Text(title ?? ''),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${title ?? ''}'),
             SizedBox(height: 16),
             Text('${body ?? ''}'),
           ],
