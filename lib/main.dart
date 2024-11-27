@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Cairo',
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(),
@@ -43,7 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 // print("the current path is ${soundFile.path}");
               },
               encode: AudioEncoderType.AAC,
-              
             ),
           ),
         ),

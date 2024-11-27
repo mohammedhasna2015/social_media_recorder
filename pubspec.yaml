@@ -56,6 +56,69 @@ flutter:
     - assets/images/
     - assets/audio/
   #   - images/a_dot_ham.jpeg
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat/Montserrat-Black.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-BlackItalic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-BoldItalic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-ExtraBold.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-ExtraLight.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Italic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Light.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-LightItalic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-MediumItalic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-SemiBold.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Thin.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-ThinItalic.ttf
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo/Cairo-Black.ttf
+        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+          weight: 600
+        - asset: assets/fonts/Cairo/Cairo-ExtraBold.ttf
+          weight: 700
+        - asset: assets/fonts/Cairo/Cairo-ExtraLight.ttf
+        - asset: assets/fonts/Cairo/Cairo-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Cairo/Cairo-Medium.ttf
+        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Cairo/Cairo-SemiBold.ttf
+          weight: 500
+
+    - family: SfPro
+      fonts:
+        - asset: assets/fonts/SfPro/SfPro-Text-Bold.otf
+        - asset: assets/fonts/SfPro/SfPro-Text-Semibold.otf
+        - asset: assets/fonts/SfPro/SfPro-Text-HeavyItalic.ttf
+        - asset: assets/fonts/SfPro/SfPro-Text-RegularItalic.ttf
+        - asset: assets/fonts/SfPro/SfPro-Text-LightItalic.ttf
+        - asset: assets/fonts/SfPro/SfPro-Text-MediumItalic.ttf
+        - asset: assets/fonts/SfPro/SfPro-Text-BoldItalic.ttf
+        - asset: assets/fonts/SfPro/SfPro-text-light.ttf
+        - asset: assets/fonts/SfPro/SfPro-Text-SemiboldItalic.ttf
+        - asset: assets/fonts/SfPro/SfPro-Display-Black.ttf
+        - asset: assets/fonts/SfPro/SfPro-text-medium.ttf
+
+    - family: AvenirArabic
+      fonts:
+        - asset: assets/fonts/AvenirArabic/AvenirArabic-Black.otf
+          weight: 700
+        - asset: assets/fonts/AvenirArabic/AvenirArabic-Book.otf
+          weight: 600
+        - asset: assets/fonts/AvenirArabic/AvenirArabic-Heavy.otf
+          weight: 500
+        - asset: assets/fonts/AvenirArabic/AvenirArabic-Medium.otf
+          weight: 400
+        - asset: assets/fonts/AvenirArabic/AvenirArabic-Light1.otf
+          weight: 300
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

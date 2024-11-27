@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_recorder/provider/sound_record_notifier.dart';
+import 'package:social_media_recorder/widgets/customDialog.dart';
 import 'package:social_media_recorder/widgets/lock_record.dart';
 import 'package:social_media_recorder/widgets/show_counter.dart';
 import 'package:social_media_recorder/widgets/show_mic_with_text.dart';
@@ -152,36 +153,6 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     );
   }
 
-  void showPermissionDialog(BuildContext context, String title, String body) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title ?? ''),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16),
-            Text('${body ?? ''}'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(widget.isAr ? 'إلغاء' : 'Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              await openAppSettings();
-              Navigator.of(context).pop();
-            },
-            child: Text(widget.isAr ? 'فتح الاعدادات' : 'Open Settings'),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget recordVoice(SoundRecordNotifier state) {
     if (state.lockScreenRecord == true) {
       return SoundRecorderWhenLockedDesign(
@@ -299,29 +270,22 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     }
   }
 
-  void _showPermissionDialog() {
-    showDialog(
+  Future<void> _showPermissionDialog() async {
+    final isConfirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(_getLocalizedText('permission_required')),
-          content: Text(_getLocalizedText('permission_settings_message')),
-          actions: <Widget>[
-            TextButton(
-              child: Text(_getLocalizedText('cancel')),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: Text(_getLocalizedText('open_settings')),
-              onPressed: () {
-                Navigator.of(context).pop();
-                openAppSettings();
-              },
-            ),
-          ],
-        );
-      },
+      builder: (_) => Directionality(
+        textDirection: widget.isAr ? TextDirection.rtl : TextDirection.ltr,
+        child: CustomDialog(
+          title: _getLocalizedText('permission_required'),
+          body: _getLocalizedText('permission_settings_message'),
+          titleYes: _getLocalizedText('open_settings'),
+          titleNo: _getLocalizedText('cancel'),
+        ),
+      ),
     );
+    if (isConfirm != null && isConfirm) {
+      await openAppSettings();
+    }
   }
 
   String _getLocalizedText(String key) {
@@ -338,9 +302,9 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
       'ar': {
         'permissions_granted': 'تم منح أذونات التسجيل الصوتي',
         'permissions_denied': 'تم رفض أذونات التسجيل الصوتي',
-        'permission_required': 'الأذونات مطلوبة',
+        'permission_required': 'السماحيات المطلوبة',
         'permission_settings_message':
-            'يرجى منح أذونات الميكروفون والتخزين في إعدادات التطبيق.',
+            'يرجى منح أذن المايكروفون وتخزين الملفات في إعدادت التطبيق',
         'cancel': 'إلغاء',
         'open_settings': 'فتح الإعدادات',
       }

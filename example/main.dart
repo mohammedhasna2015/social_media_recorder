@@ -41,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: SocialMediaRecorder(
+                  isAr: false,
                   sendRequestFunction: (soundFile) {
                     // print("the current path is ${soundFile.path}");
                   },
