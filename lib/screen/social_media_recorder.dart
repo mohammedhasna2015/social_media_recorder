@@ -153,6 +153,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     );
   }
 
+  bool isEnabled = false;
   Widget recordVoice(SoundRecordNotifier state) {
     if (state.lockScreenRecord == true) {
       return SoundRecorderWhenLockedDesign(
@@ -172,15 +173,21 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
 
     return Listener(
       onPointerDown: (details) async {
-        final isPermissionsEnabled = await requestAudioPermissions();
-        if (isPermissionsEnabled) {
+        final status1 = await Permission.microphone.status;
+        final status2 = await Permission.storage.status;
+        final status3 = await Permission.manageExternalStorage.status;
+        if (status1.isGranted && (status2.isGranted || status3.isGranted)) {
           state.setNewInitialDraggableHeight(details.position.dy);
           state.resetEdgePadding(showSound: false);
           soundRecordNotifier.isShow = true;
           state.record();
+          isEnabled = true;
+        } else {
+          await requestAudioPermissions();
         }
       },
       onPointerUp: (details) async {
+        if (!isEnabled) return;
         if (!state.isLocked) {
           if (state.buttonPressed) {
             if (state.second > 1 || state.minute > 0) {
