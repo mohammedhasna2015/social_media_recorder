@@ -174,9 +174,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
     return Listener(
       onPointerDown: (details) async {
         final status1 = await Permission.microphone.status;
-        final status2 = await Permission.storage.status;
-        final status3 = await Permission.manageExternalStorage.status;
-        if (status1.isGranted && (status2.isGranted || status3.isGranted)) {
+        if (status1.isGranted) {
           state.setNewInitialDraggableHeight(details.position.dy);
           state.resetEdgePadding(showSound: false);
           soundRecordNotifier.isShow = true;
@@ -259,17 +257,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
   Future<bool> requestAudioPermissions() async {
     // Request microphone permission first
     var microphoneStatus = await Permission.microphone.request();
-    if (!microphoneStatus.isGranted) {
-      _showPermissionDialog(); // Show dialog only if microphone permission is denied
-      return false;
-    }
-
-    // If microphone permission is granted, then request storage permissions
-    var storageStatus = await Permission.storage.request();
-    var externalStorageStatus =
-        await Permission.manageExternalStorage.request();
-
-    if (storageStatus.isGranted || externalStorageStatus.isGranted) {
+    if (microphoneStatus.isGranted) {
       return true;
     } else {
       _showPermissionDialog(); // Show dialog if storage permissions are denied
@@ -302,7 +290,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         'permissions_denied': 'Audio recording permissions denied',
         'permission_required': 'Permissions Required',
         'permission_settings_message':
-            'Please grant microphone and storage permissions in app settings.',
+            'Please grant microphone permissions in app settings.',
         'cancel': 'Cancel',
         'open_settings': 'Open Settings',
       },
@@ -311,7 +299,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
         'permissions_denied': 'تم رفض أذونات التسجيل الصوتي',
         'permission_required': 'السماحيات المطلوبة',
         'permission_settings_message':
-            'يرجى منح أذن المايكروفون وتخزين الملفات في إعدادت التطبيق',
+            'يرجى منح أذن المايكروفون في إعدادت التطبيق',
         'cancel': 'إلغاء',
         'open_settings': 'فتح الإعدادات',
       }

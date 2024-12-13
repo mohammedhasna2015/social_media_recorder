@@ -332,42 +332,50 @@ packages:
     dependency: "direct main"
     description:
       name: permission_handler
-      sha256: bc56bfe9d3f44c3c612d8d393bd9b174eb796d706759f9b495ac254e4294baa5
+      sha256: "18bf33f7fefbd812f37e72091a15575e72d5318854877e0e4035a24ac1113ecb"
       url: "https://pub.dev"
     source: hosted
-    version: "10.4.5"
+    version: "11.3.1"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
-      sha256: "59c6322171c29df93a22d150ad95f3aa19ed86542eaec409ab2691b8f35f9a47"
+      sha256: "71bbecfee799e65aff7c744761a57e817e73b738fedf62ab7afd5593da21f9f1"
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.6"
+    version: "12.0.13"
   permission_handler_apple:
     dependency: transitive
     description:
       name: permission_handler_apple
-      sha256: "99e220bce3f8877c78e4ace901082fb29fa1b4ebde529ad0932d8d664b34f3f5"
+      sha256: e6f6d73b12438ef13e648c4ae56bd106ec60d17e90a59c4545db6781229082a0
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.4"
+    version: "9.4.5"
+  permission_handler_html:
+    dependency: transitive
+    description:
+      name: permission_handler_html
+      sha256: "38f000e83355abb3392140f6bc3030660cfaef189e1f87824facb76300b4ff24"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3+5"
   permission_handler_platform_interface:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
-      sha256: "6760eb5ef34589224771010805bea6054ad28453906936f843a8cc4d3a55c4a4"
+      sha256: e9c8eadee926c4532d0305dff94b85bf961f16759c3af791486613152af4b4f9
       url: "https://pub.dev"
     source: hosted
-    version: "3.12.0"
+    version: "4.2.3"
   permission_handler_windows:
     dependency: transitive
     description:
       name: permission_handler_windows
-      sha256: cc074aace208760f1eee6aa4fae766b45d947df85bc831cde77009cdb4720098
+      sha256: "1a790728016f79a41216d88672dbc5df30e686e811ad4e698bfc51f76ad91f1e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.3"
+    version: "0.2.1"
   platform:
     dependency: transitive
     description:
@@ -396,26 +404,50 @@ packages:
     dependency: "direct main"
     description:
       name: record
-      sha256: f5dfa28ba57a74dd37588bb51e3f8bb2f12d17cbc40aa6a89ccfb89049700214
+      sha256: f703397f5a60d9b2b655b3acc94ba079b2d9a67dc0725bdb90ef2fee2441ebf7
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.4"
+    version: "4.4.4"
+  record_linux:
+    dependency: transitive
+    description:
+      name: record_linux
+      sha256: "348db92c4ec1b67b1b85d791381c8c99d7c6908de141e7c9edc20dad399b15ce"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
+  record_macos:
+    dependency: transitive
+    description:
+      name: record_macos
+      sha256: d1d0199d1395f05e218207e8cacd03eb9dc9e256ddfe2cfcbbb90e8edea06057
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
   record_platform_interface:
     dependency: transitive
     description:
       name: record_platform_interface
-      sha256: "2e3c496f6890e5de0f0bdfb0b384a13daa5dd6c59e1d23cf1118771b4dff19c3"
+      sha256: "7a2d4ce7ac3752505157e416e4e0d666a54b1d5d8601701b7e7e5e30bec181b4"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.5.0"
   record_web:
     dependency: transitive
     description:
       name: record_web
-      sha256: "8ab7b7b49ab43f8ba9b7ec18f904f3a894d0f0944769bb29aaee72764e58ddc1"
+      sha256: "219ffb4ca59b4338117857db56d3ffadbde3169bcaf1136f5f4d4656f4a2372d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "0.5.0"
+  record_windows:
+    dependency: transitive
+    description:
+      name: record_windows
+      sha256: "42d545155a26b20d74f5107648dbb3382dbbc84dc3f1adc767040359e57a1345"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.1"
   sky_engine:
     dependency: transitive
     description: flutter
