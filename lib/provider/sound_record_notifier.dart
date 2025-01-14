@@ -23,7 +23,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   double last = 0;
 
   /// recording mp3 sound Object
-  Record recordMp3 = Record();
+  AudioRecorder recordMp3 = AudioRecorder();
 
   AudioPlayer _audioPlayer = AudioPlayer();
 
@@ -243,7 +243,7 @@ class SoundRecordNotifier extends ChangeNotifier {
     buttonPressed = true;
     String recordFilePath = await getFilePath();
     _timer = Timer(const Duration(milliseconds: 900), () {
-      recordMp3.start(path: recordFilePath);
+      recordMp3.start(const RecordConfig(), path: recordFilePath);
     });
     _mapCounterGenerater();
     notifyListeners();
