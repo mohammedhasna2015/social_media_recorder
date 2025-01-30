@@ -248,21 +248,8 @@ class SoundRecordNotifier extends ChangeNotifier {
         throw Exception('Failed to create audio directory');
       }
 
-      final testFile = File('${audioDir.path}/test.tmp');
-      try {
-        await testFile
-            .writeAsString('test')
-            .timeout(const Duration(seconds: 2));
-        await testFile.delete();
-      } catch (e) {
-        throw Exception('Directory is not writable: $e');
-      }
-
       // 4. Generate unique filename with better error handling
       final uuid = const Uuid().v4();
-      if (uuid.isEmpty) {
-        throw Exception('Failed to generate UUID');
-      }
 
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final String filename = '${uuid}_$timestamp.m4a';
