@@ -67,11 +67,13 @@ class SocialMediaRecorder extends StatefulWidget {
   // use it to change send button when user lock the record
   final Widget? sendButtonIcon;
   final int? timeRecordLimitation;
+  final String pathRecord;
   // ignore: sort_constructors_first
   const SocialMediaRecorder({
     this.sendButtonIcon,
     this.isAr = true,
     required this.sendRequestFunction,
+    required this.pathRecord,
     this.recordIcon,
     this.voiceButtonColor,
     this.lockButton,
@@ -106,6 +108,7 @@ class _SocialMediaRecorder extends State<SocialMediaRecorder> {
       sendRequestFunction: widget.sendRequestFunction,
       timeRecordLimitation: widget.timeRecordLimitation,
       slideToCancelValue: widget.slideToCancelValue,
+      mPath: widget.pathRecord,
     );
     soundRecordNotifier.isShow = false;
     soundRecordNotifier.voidInitialSound();

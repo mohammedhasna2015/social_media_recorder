@@ -3,10 +3,8 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:social_media_recorder/audio_encoder_type.dart';
-import 'package:uuid/uuid.dart';
 
 class SoundRecordNotifier extends ChangeNotifier {
   GlobalKey key = GlobalKey();
@@ -64,7 +62,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   /// store status of record if lock change to true else
   /// false
   late bool lockScreenRecord;
-  late String mPath;
+  final String mPath;
   late AudioEncoderType encode;
   late Function(File soundFile) sendRequestFunction;
   final int? slideToCancelValue;
@@ -78,7 +76,7 @@ class SoundRecordNotifier extends ChangeNotifier {
     this.second = 0,
     this.buttonPressed = false,
     this.loopActive = false,
-    this.mPath = '',
+    required this.mPath,
     this.startRecord = false,
     this.heightPosition = 0,
     this.lockScreenRecord = false,
@@ -111,7 +109,7 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timer != null) _timer!.cancel();
     if (_timerCounter != null) _timerCounter!.cancel();
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
-    mPath = await recordMp3.stop() ?? '';
+    recordMp3.stop() ?? '';
 
     // if (sendSound ?? false) {
     //   sendPlayMp3();
@@ -223,44 +221,9 @@ class SoundRecordNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> getFilePath() async {
-    try {
-      // Get the appropriate directory based on platform
-      final Directory directory = await getApplicationDocumentsDirectory();
-      final String basePath = directory.path;
-
-      // Create audio subdirectory to keep files organized
-      final String audioDirectory = '$basePath/audio_recordings';
-      final Directory audioDir = Directory(audioDirectory);
-
-      // Create directory if it doesn't exist
-      if (!await audioDir.exists()) {
-        await audioDir.create(recursive: true);
-      }
-
-      // Generate unique filename with timestamp for better organization
-      final uuid = const Uuid().v4();
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final String filename = '${uuid}_$timestamp.m4a';
-
-      // Construct final path
-      final String filePath = '${audioDir.path}/$filename';
-
-      // Store path for later use
-      mPath = filePath;
-
-      return filePath;
-    } catch (e) {
-      // Log error and rethrow with more context
-      print('Error creating audio file path: $e');
-      throw Exception('Failed to create audio file path: $e');
-    }
-  }
-
   /// this function to start record voice
   record() async {
     buttonPressed = true;
-    String recordFilePath = await getFilePath();
     _timer = Timer(const Duration(milliseconds: 900), () {
       recordMp3.start(
           const RecordConfig(
@@ -268,7 +231,7 @@ class SoundRecordNotifier extends ChangeNotifier {
             sampleRate: 44100,
             numChannels: 2,
           ),
-          path: recordFilePath);
+          path: mPath);
     });
     _mapCounterGenerater();
     notifyListeners();
