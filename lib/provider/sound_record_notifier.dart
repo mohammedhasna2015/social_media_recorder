@@ -112,6 +112,10 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timerCounter != null) _timerCounter!.cancel();
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
     mPath = await recordMp3.stop() ?? '';
+
+    // if (sendSound ?? false) {
+    //   sendPlayMp3();
+    // }
     if (showSound ?? false) {
       endPlayMp3();
     }
@@ -258,7 +262,13 @@ class SoundRecordNotifier extends ChangeNotifier {
     buttonPressed = true;
     String recordFilePath = await getFilePath();
     _timer = Timer(const Duration(milliseconds: 900), () {
-      recordMp3.start(const RecordConfig(), path: recordFilePath);
+      recordMp3.start(
+          const RecordConfig(
+            encoder: AudioEncoder.aacLc, // Using AAC for .m4a
+            sampleRate: 44100,
+            numChannels: 2,
+          ),
+          path: recordFilePath);
     });
     _mapCounterGenerater();
     notifyListeners();
