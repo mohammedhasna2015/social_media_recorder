@@ -111,11 +111,7 @@ class SoundRecordNotifier extends ChangeNotifier {
     if (_timer != null) _timer!.cancel();
     if (_timerCounter != null) _timerCounter!.cancel();
     if (_timerLimitRecord != null) _timerLimitRecord!.cancel();
-    recordMp3.stop();
-
-    // if (sendSound ?? false) {
-    //   sendPlayMp3();
-    // }
+    mPath = await recordMp3.stop() ?? '';
     if (showSound ?? false) {
       endPlayMp3();
     }
