@@ -86,6 +86,7 @@ class _CustomDialogState extends State<CustomDialog> {
       child: SizedBox(
         height: _buttonHeight,
         child: CustomButton(
+          colorBorder: Color(0xFF26467A),
           colorButton: Color(0xFF26467A),
           text: widget.titleYes ?? '',
           onPressed: () => Navigator.of(context).pop(true),

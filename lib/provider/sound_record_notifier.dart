@@ -224,18 +224,37 @@ class SoundRecordNotifier extends ChangeNotifier {
   }
 
   Future<String> getFilePath() async {
-    String _sdPath = "";
-    Directory tempDir = await getTemporaryDirectory();
-    _sdPath = tempDir.path;
-    var d = Directory(_sdPath);
-    if (!d.existsSync()) {
-      d.createSync(recursive: true);
+    try {
+      // Get the appropriate directory based on platform
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final String basePath = directory.path;
+
+      // Create audio subdirectory to keep files organized
+      final String audioDirectory = '$basePath/audio_recordings';
+      final Directory audioDir = Directory(audioDirectory);
+
+      // Create directory if it doesn't exist
+      if (!await audioDir.exists()) {
+        await audioDir.create(recursive: true);
+      }
+
+      // Generate unique filename with timestamp for better organization
+      final uuid = const Uuid().v4();
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final String filename = '${uuid}_$timestamp.m4a';
+
+      // Construct final path
+      final String filePath = '${audioDir.path}/$filename';
+
+      // Store path for later use
+      mPath = filePath;
+
+      return filePath;
+    } catch (e) {
+      // Log error and rethrow with more context
+      print('Error creating audio file path: $e');
+      throw Exception('Failed to create audio file path: $e');
     }
-    var uuid = const Uuid();
-    String uid = uuid.v4();
-    String storagePath = _sdPath + "/" + uid + '.m4a';
-    mPath = storagePath;
-    return storagePath;
   }
 
   /// this function to start record voice
