@@ -225,34 +225,59 @@ class SoundRecordNotifier extends ChangeNotifier {
 
   Future<String> getFilePath() async {
     try {
-      // Get the appropriate directory based on platform
-      final Directory directory = await getApplicationDocumentsDirectory();
-      final String basePath = directory.path;
+      // 1. Get the base directory with error handling
+      final Directory directory = await getApplicationDocumentsDirectory()
+          .timeout(const Duration(seconds: 5),
+              onTimeout: () =>
+                  throw TimeoutException('Failed to get directory'));
 
-      // Create audio subdirectory to keep files organized
+      final String basePath = directory.path;
       final String audioDirectory = '$basePath/audio_recordings';
       final Directory audioDir = Directory(audioDirectory);
 
-      // Create directory if it doesn't exist
+      // 2. Create directory with proper error handling
       if (!await audioDir.exists()) {
-        await audioDir.create(recursive: true);
+        await audioDir.create(recursive: true).timeout(
+            const Duration(seconds: 5),
+            onTimeout: () =>
+                throw TimeoutException('Failed to create directory'));
       }
 
-      // Generate unique filename with timestamp for better organization
+      // 3. Verify directory exists and is writable
+      if (!await audioDir.exists()) {
+        throw Exception('Failed to create audio directory');
+      }
+
+      final testFile = File('${audioDir.path}/test.tmp');
+      try {
+        await testFile
+            .writeAsString('test')
+            .timeout(const Duration(seconds: 2));
+        await testFile.delete();
+      } catch (e) {
+        throw Exception('Directory is not writable: $e');
+      }
+
+      // 4. Generate unique filename with better error handling
       final uuid = const Uuid().v4();
+      if (uuid.isEmpty) {
+        throw Exception('Failed to generate UUID');
+      }
+
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final String filename = '${uuid}_$timestamp.m4a';
-
-      // Construct final path
       final String filePath = '${audioDir.path}/$filename';
 
-      // Store path for later use
-      mPath = filePath;
+      // 5. Verify the path is valid
+      if (filePath.isEmpty || !filePath.endsWith('.m4a')) {
+        throw Exception('Invalid file path generated');
+      }
 
       return filePath;
     } catch (e) {
-      // Log error and rethrow with more context
-      print('Error creating audio file path: $e');
+      // 6. Comprehensive error logging
+      print('Error in getFilePath: $e');
+      print('Stack trace: ${StackTrace.current}');
       throw Exception('Failed to create audio file path: $e');
     }
   }
@@ -261,15 +286,7 @@ class SoundRecordNotifier extends ChangeNotifier {
   record() async {
     buttonPressed = true;
     String recordFilePath = await getFilePath();
-    _timer = Timer(const Duration(milliseconds: 900), () {
-      recordMp3.start(
-          const RecordConfig(
-            encoder: AudioEncoder.aacLc, // Using AAC for .m4a
-            sampleRate: 44100,
-            numChannels: 2,
-          ),
-          path: recordFilePath);
-    });
+    recordMp3.start(const RecordConfig(), path: recordFilePath);
     _mapCounterGenerater();
     notifyListeners();
   }
